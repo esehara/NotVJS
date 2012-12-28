@@ -2,7 +2,7 @@
 <html>
 <head>
   <link rel="stylesheet" href="css/main.css" />
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script src="js/jquery-1.7.1.min.js"></script>
   <script src="js/socket.io.js"></script>
   <script src="js/shortcut.js"></script>
   <script src="js/jquery.upload-1.0.2.min.js"></script>
@@ -24,6 +24,13 @@
             vjsystem.emit('KeyEvent', 'DestoryPicture');
         });
 
+        shortcut.add('B', function() {
+            vjsystem.emit('KeyEvent', 'SetBackground');
+        });
+
+        shortcut.add('C', function() {
+            vjsystem.emit('KeyEvent', 'ClearBackground');
+        });
         // Establish event handlers
         vjsystem.on('disconnect', function() {
             vjsystem.socket.reconnect();
@@ -48,6 +55,15 @@
           $("#vj_image").attr({'src': url});
       });
 
+      vjsystem.on('set_background_image', function(url) {
+          console.log('set_background_image');
+          if (url === "") {
+            $("body").css('background-image', '');
+          } else {
+            $("body").css('background-image', 'url(' + url + ')');
+          }
+        });
+
       $('#submitButton').click(function() {
         $('input[type=file]').upload('/upload',
             function(res) {
@@ -69,7 +85,8 @@
         <input type="file" name="filearg"/>
         <input type="button" id="submitButton" />
     </form>
-
-    <img src="" id="vj_image"/>
+    <div id="vj_image_wrapper">
+        <img src="" id="vj_image"/>
+    </div>
 </body>
 </html>

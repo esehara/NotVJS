@@ -40,7 +40,6 @@ class Upload(tornado.web.RequestHandler):
         fh.close()
 
         im = Image.open("static/pic/" + fname)
-        im = im.resize((640, 480))
         im.save('static/pic/' + fname)
 
         response['status'] = True

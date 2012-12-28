@@ -51,11 +51,12 @@ class Binding:
         self.bindings_key = {
             "PreviousPictureShow": self.previous_pic,
             "NextPictureShow": self.next_pic,
-            "DestoryPicture": self.destory_pic}
+            "DestoryPicture": self.destory_pic,
+            "SetBackground": self.set_background,
+            "ClearBackground": self.clear_background}
 
         self.bindings = {
-            "LoadPicture": self.set_picture,
-                }
+            "LoadPicture": self.set_picture}
 
     def run_key_event(self, socket, event, *args, **kwargs):
         self.bindings_key[event](socket, *args, **kwargs)
@@ -80,13 +81,19 @@ class Binding:
         self.filemanager.next()
         self.set_picture(socket)
 
-    def set_picture(self, socket):
-        
-        if self.filemanager.tempfile is None:
-            filename = self.filemanager.current()
-        else:
-            filename = self.filemanager.current()
+    def clear_background(self, socket):
+        socket.broadcast(
+            'set_background_image', '')
 
+    def set_background(self, socket):
+
+        filename = self.filemanager.current()
+        socket.broadcast(
+            'set_background_image', filename)
+
+    def set_picture(self, socket):
+
+        filename = self.filemanager.current()
         socket.broadcast(
             'set_image', filename)
 
