@@ -3,24 +3,17 @@
 from os import path
 import json
 import tornado.web
-from socketio import EventConnection
+from notvjs.socketio import EventConnection
 from tornadio2 import TornadioRouter
 
 ROOT = path.normpath(path.dirname(__file__))
-static_path = path.join(ROOT, 'static/')
+static_path = path.join(ROOT, 'static')
+
 
 class NotVJSHandler:
     class Index(tornado.web.RequestHandler):
         def get(self):
             self.render('static/index.html')
-
-    class Socket(tornado.web.RequestHandler):
-        def get(self):
-            self.render('static/socket.io.js')
-
-    class ShortcutJS(tornado.web.RequestHandler):
-        def get(self):
-            self.render('static/shortcut.js')
 
 EventRouter = TornadioRouter(
     EventConnection)
@@ -52,8 +45,6 @@ class Upload(tornado.web.RequestHandler):
 application = tornado.web.Application(
     EventRouter.apply_routes([
         (r"/", NotVJSHandler.Index),
-        (r"/socket.io.js", NotVJSHandler.Socket),
-        (r"/shortcut.js", NotVJSHandler.ShortcutJS),
         (r"/pic/(.*)", tornado.web.StaticFileHandler, {
             'path': path.join(static_path, "pic")}),
         (r"/temp/(.*)", tornado.web.StaticFileHandler, {

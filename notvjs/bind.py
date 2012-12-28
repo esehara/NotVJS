@@ -3,34 +3,44 @@
 import os
 from utils import ImageDestory
 
+
 class FileManager:
 
-    ROOT = os.path.normpath(
-        os.path.dirname(__file__))
+    ROOT = os.path.join(os.path.normpath(
+        os.path.dirname(__file__)), '..')
 
     static_path = os.path.join(
         ROOT, 'static')
-    
+ 
     filelist = os.listdir(
         os.path.join(static_path, 'pic'))
 
     def __init__(self):
+        self.tempfile = None
         self.pointer = 0
 
     def current(self):
-        return self.filelist[self.pointer]
+        if self.tempfile is None:
+            return "pic/" + self.filelist[self.pointer]
+        else:
+            return self.tempfile
 
     def next(self):
+        self.tempfile = None
         self.pointer += 1
         if self.pointer >= len(self.filelist):
             self.pointer = 0
         return self.current()
 
     def past(self):
+        self.tempfile = None
         self.pointer -= 1
         if self.pointer < 0:
             self.pointer = len(self.filelist) - 1
         return self.current()
+
+    def set_path(self, path):
+        self.tempfile = path
 
 
 class Binding:
@@ -55,11 +65,12 @@ class Binding:
 
     def destory_pic(self, socket):
         picture_path = self.filemanager.current()
-        img = ImageDestory("static/pic/" + picture_path)
+        img = ImageDestory("static/" + picture_path)
         img.random_cut_paste()
         img.save('static/temp/destory.jpg')
         picture_path = 'temp/destory.jpg'
-        self.set_picture(socket, picture_path)
+        self.filemanager.tempfile = picture_path
+        self.set_picture(socket)
 
     def previous_pic(self, socket):
         self.filemanager.past()
@@ -69,10 +80,12 @@ class Binding:
         self.filemanager.next()
         self.set_picture(socket)
 
-    def set_picture(self, socket, filename=None):
-
-        if filename is None:
-            filename = "/pic/" + self.filemanager.current()
+    def set_picture(self, socket):
+        
+        if self.filemanager.tempfile is None:
+            filename = self.filemanager.current()
+        else:
+            filename = self.filemanager.current()
 
         socket.broadcast(
             'set_image', filename)
