@@ -25,3 +25,10 @@ h1 {
     margin-right: auto;
 }
 
+#vj_form {
+    background-color: black;
+    width: 100%;
+    position: absolute;
+    bottom: 0px;
+}
+
