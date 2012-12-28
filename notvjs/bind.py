@@ -55,7 +55,8 @@ class Binding:
             "SetBackground": self.set_background,
             "ClearBackground": self.clear_background,
             "RotatePicture": self.rotate_pic,
-            "ColorLinePicture": self.colorline_pic}
+            "ColorLinePicture": self.colorline_pic,
+            "ShadowLinePicture": self.shadowline_pic}
 
         self.bindings = {
             "LoadPicture": self.set_picture}
@@ -82,6 +83,13 @@ class Binding:
         picture_path = self.filemanager.current()
         img = ImageDestory("static/" + picture_path)
         img.random_draw_line_noise()
+        img.save('static/temp/destory.jpg')
+        self.__set_tempfile(socket, picture_path)
+
+    def shadowline_pic(self, socket):
+        picture_path = self.filemanager.current()
+        img = ImageDestory("static/" + picture_path)
+        img.random_shadow_line()
         img.save('static/temp/destory.jpg')
         self.__set_tempfile(socket, picture_path)
 

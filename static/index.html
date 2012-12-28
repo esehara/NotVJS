@@ -39,6 +39,10 @@
         shortcut.add('L', function() {
             vjsystem.emit('KeyEvent', 'ColorLinePicture');
         });
+
+        shortcut.add('S', function() {
+            vjsystem.emit('KeyEvent', 'ShadowLinePicture');
+        });
         
         // Establish event handlers
         vjsystem.on('disconnect', function() {

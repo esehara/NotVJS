@@ -35,7 +35,7 @@ class ImageDestory:
         return (r, g, b)
 
     def random_draw_line_noise(self, noise=True):
-        self._do_draw_line(self.img, max_line=100, noise=True)
+        self._do_draw_line(self.img, max_line=100, noise=False)
 
     def _do_draw_line(self, canvas, max_line=5, noise=False):
         def __gen_random(canvas_x, noise):
