@@ -1,8 +1,9 @@
 html, body {
     padding: 0px;
     margin: 0px;
+    height: 100%;
+    width: 100%;
 }
-
 
 h1 {
     padding: 0px;
@@ -10,5 +11,17 @@ h1 {
     font-size: 8px;
     background-color: #000;
     color: white;
+}
+
+#vj_image_wrapper {
+    height: 30%;
+    padding: 0; /* paddingがある(1以上)と計算が変わる */
+    top: 35%;  /* (100 - height) の半分 */
+    text-align: center;
+}
+
+#vj_image {
+    margin-left: auto;
+    margin-right: auto;
 }
 
