@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link rel="stylesheet" href="css/main.css" />
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+  <script src="socket.io.js"></script>
+  <script src="shortcut.js"></script>
+  <script src="js/jquery.upload-1.0.2.min.js"></script>
+  <script>
+    $(function() {
+        var vjsystem = new io.connect('http://' + window.location.host);
+
+        // shortcut setting
+
+        shortcut.add('J', function() {
+            vjsystem.emit('KeyEvent', 'PreviousPictureShow');
+        });
+
+        shortcut.add('K', function() {
+            vjsystem.emit('KeyEvent', 'NextPictureShow');
+        });
+
+        shortcut.add('D', function() {
+            vjsystem.emit('KeyEvent', 'DestoryPicture');
+        });
+
+        // Establish event handlers
+        vjsystem.on('disconnect', function() {
+            vjsystem.socket.reconnect();
+        });
+
+        vjsystem.on('connect', function() {
+            
+          function run_start()
+          {
+
+              vjsystem.emit('Event', 'LoadPicture');
+              /*
+              ping.emit('ping', encodeDate(new Date()), function(clientDate, serverDate) {
+              
+              });
+              */
+          }
+          run_start();
+      });
+      
+      vjsystem.on('set_image', function(url) {
+          $("#vj_image").attr({'src': url});
+      });
+
+      $('#submitButton').click(function() {
+        $('input[type=file]').upload('/upload',
+            function(res) {
+                if (res.status) {
+                    vjsystem.emit('EchoPicture', res.path);
+                }
+            }, 'json');
+      });
+    });
+</script>
+</head>
+<body>
+    <h1>NotVJS</h1>
+    
+    <form method="POST" action="/upload">
+        <input type="file" name="filearg"/>
+        <input type="button" id="submitButton" />
+    </form>
+
+    <img src="" id="vj_image"/>
+</body>
+</html>

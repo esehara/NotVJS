@@ -1,0 +1,14 @@
+html, body {
+    padding: 0px;
+    margin: 0px;
+}
+
+
+h1 {
+    padding: 0px;
+    margin: 0px;
+    font-size: 8px;
+    background-color: #000;
+    color: white;
+}
+
