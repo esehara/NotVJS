@@ -35,7 +35,7 @@ class ImageDestory:
         return (r, g, b)
 
     def random_draw_line_noise(self, noise=True):
-        self._do_draw_line(self.img, max_line=50, noise=True)
+        self._do_draw_line(self.img, max_line=100, noise=True)
 
     def _do_draw_line(self, canvas, max_line=5, noise=False):
         def __gen_random(canvas_x, noise):
@@ -68,7 +68,7 @@ class ImageDestory:
         return canvas
 
     def random_rotate(self):
-        select_rotate = self._select_rotate()
+        select_rotate = Image.ROTATE_90
         if select_rotate:
             self.img = self.img.transpose(select_rotate)
     
@@ -111,7 +111,7 @@ class ImageDestory:
         
         background = self._get_rect(x, start_y, height)
         self.img = Image.blend(
-                image, background, 0.08).convert("RGB")
+                image, background, 0.10).convert("RGB")
         if start_y + height < max_y:
             self.random_color(start_y=start_y + height)
 

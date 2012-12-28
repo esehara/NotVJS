@@ -31,6 +31,15 @@
         shortcut.add('C', function() {
             vjsystem.emit('KeyEvent', 'ClearBackground');
         });
+
+        shortcut.add('R', function() {
+            vjsystem.emit('KeyEvent', 'RotatePicture');
+        });
+
+        shortcut.add('L', function() {
+            vjsystem.emit('KeyEvent', 'ColorLinePicture');
+        });
+        
         // Establish event handlers
         vjsystem.on('disconnect', function() {
             vjsystem.socket.reconnect();

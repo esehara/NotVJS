@@ -53,7 +53,9 @@ class Binding:
             "NextPictureShow": self.next_pic,
             "DestoryPicture": self.destory_pic,
             "SetBackground": self.set_background,
-            "ClearBackground": self.clear_background}
+            "ClearBackground": self.clear_background,
+            "RotatePicture": self.rotate_pic,
+            "ColorLinePicture": self.colorline_pic}
 
         self.bindings = {
             "LoadPicture": self.set_picture}
@@ -64,14 +66,31 @@ class Binding:
     def run_event(self, socket, event, *args, **kwargs):
         self.bindings[event](socket, *args, **kwargs)
 
+    def __set_tempfile(self, socket, picture_path):
+        picture_path = 'temp/destory.jpg'
+        self.filemanager.tempfile = picture_path
+        self.set_picutre(socket)
+
+    def rotate_pic(self, socket):
+        picture_path = self.filemanager.current()
+        img = ImageDestory("static/" + picture_path)
+        img.random_rotate()
+        img.save('static/temp/destory.jpg')
+        self.__set_tempfile(socket, picture_path)
+
+    def colorline_pic(self, socket):
+        picture_path = self.filemanager.current()
+        img = ImageDestory("static/" + picture_path)
+        img.random_draw_line_noise()
+        img.save('static/temp/destory.jpg')
+        self.__set_tempfile(socket, picture_path)
+
     def destory_pic(self, socket):
         picture_path = self.filemanager.current()
         img = ImageDestory("static/" + picture_path)
         img.random_cut_paste()
         img.save('static/temp/destory.jpg')
-        picture_path = 'temp/destory.jpg'
-        self.filemanager.tempfile = picture_path
-        self.set_picture(socket)
+        self.__set_tempfile(socket, picture_path)
 
     def previous_pic(self, socket):
         self.filemanager.past()
