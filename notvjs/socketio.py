@@ -19,6 +19,7 @@ class EventConnection(SocketConnection):
 
     @event
     def EchoPicture(self, event):
+        self.binding.filemanager.tempfile = event
         self.broadcast('set_image', event)
 
     @event
