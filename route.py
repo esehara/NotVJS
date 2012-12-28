@@ -2,6 +2,7 @@
 
 from os import path
 import json
+import Image
 import tornado.web
 from notvjs.socketio import EventConnection
 from tornadio2 import TornadioRouter
@@ -32,10 +33,15 @@ class Upload(tornado.web.RequestHandler):
                 json.dumps(response))
 
         fileinfo = self.request.files['filearg'][0]
-        print "fileinfo is", fileinfo
+
         fname = fileinfo['filename']
         fh = open("static/pic/" + fname, 'w')
         fh.write(fileinfo['body'])
+        fh.close()
+
+        im = Image.open("static/pic/" + fname)
+        im = im.resize((640, 480))
+        im.save('static/pic/' + fname)
 
         response['status'] = True
         response['path'] = "pic/" + fname
