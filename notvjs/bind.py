@@ -40,7 +40,7 @@ class Binding:
     def __set_tempfile(self, socket, picture_path):
         picture_path = 'temp/destory.jpg'
         self.filemanager.tempfile = picture_path
-        self.set_picutre(socket)
+        self.set_picture(socket)
 
     def rotate_pic(self, socket):
         picture_path = self.filemanager.current()
