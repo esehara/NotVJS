@@ -86,36 +86,44 @@
 
       vjsystem.on('set_configure', function(json) {
           $("#vj_image").attr({'src': json.image});
-          
-          $('#vj_image_wrapper').css('top', json.position.y);
-          $('#vj_image_wrapper').css('left', json.position.x);
-          
-          if (typeof json.background === "null") {
-            $("body").css('background-image', '');
-          } else {
-            $("body").css('background-image', 'url(' + json.background + ')');
-          }
+          vjsystem_changer.set_position(json.position);
+          vjsystem_changer.set_background_image(json.background);
+          vjsystem_changer.show_image_toggle(json.show_status);
       });
 
-      vjsystem.on('set_background_image', function(url) {
-          if (url === "") {
-            $("body").css('background-image', '');
-          } else {
-            $("body").css('background-image', 'url(' + url + ')');
-          }
+      var vjsystem_changer = {
+            set_background_image: function(url) {
+                if (url === "") {
+                    $("body").css('background-image', '');
+                } else {
+                    $("body").css('background-image', 'url(' + url + ')');
+                }
+            },
+
+            set_position: function(json) {
+                $('#vj_image_wrapper').css('top', json.y);
+                $('#vj_image_wrapper').css('left', json.x);
+            },
+
+            show_image_toggle: function(bool) {
+                if (bool) {
+                    $('#vj_image').css('display', '');    
+                    } else {
+                    $('#vj_image').css('display', 'none');
+                }
+            }
+      };
+
+        vjsystem.on('set_background_image', function(url) {
+            vjsystem_changer.set_background_image(url);
         });
 
         vjsystem.on('set_position', function(json) {
-            $('#vj_image_wrapper').css('top', json.y);
-            $('#vj_image_wrapper').css('left', json.x);
+            vjsystem_changer.set_position(json);
         });
 
         vjsystem.on('show_image_toggle', function(bool) {
-            if (bool) {
-                $('#vj_image').css('display', '');    
-                } else {
-                $('#vj_image').css('display', 'none');
-            }
+            vjsystem_changer.show_image_toggle(bool);
         });
 
       $('#submitButton').click(function() {

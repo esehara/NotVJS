@@ -120,7 +120,8 @@ class Binding:
             'image': self.filemanager.current(),
             'background': self.current_background,
             'position': {
-                'x': self.picture_x, 'y': self.picture_y}}
+                'x': self.picture_x, 'y': self.picture_y},
+            'show_status': self.show_status}
 
         socket.broadcast(
             'set_configure', get_configure)
