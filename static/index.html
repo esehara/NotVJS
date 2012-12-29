@@ -40,9 +40,11 @@
             vjsystem.emit('KeyEvent', 'ColorLinePicture');
         });
 
+        /*
         shortcut.add('S', function() {
             vjsystem.emit('KeyEvent', 'ShadowLinePicture');
         });
+        */
 
         shortcut.add('up', function() {
             vjsystem.emit('KeyEvent', 'UpPicture');
@@ -58,6 +60,10 @@
 
         shortcut.add('right', function() {
             vjsystem.emit('KeyEvent', 'RightPicture');
+        });
+
+        shortcut.add('S', function() {
+            vjsystem.emit('KeyEvent', 'ShowPictureToggle');
         });
 
         // Establish event handlers
@@ -92,7 +98,6 @@
       });
 
       vjsystem.on('set_background_image', function(url) {
-          console.log('set_background_image');
           if (url === "") {
             $("body").css('background-image', '');
           } else {
@@ -103,6 +108,14 @@
         vjsystem.on('set_position', function(json) {
             $('#vj_image_wrapper').css('top', json.y);
             $('#vj_image_wrapper').css('left', json.x);
+        });
+
+        vjsystem.on('show_image_toggle', function(bool) {
+            if (bool) {
+                $('#vj_image').css('display', '');    
+                } else {
+                $('#vj_image').css('display', 'none');
+            }
         });
 
       $('#submitButton').click(function() {
@@ -130,6 +143,7 @@
         <input type="file" name="filearg"/>
         <input type="button" id="submitButton" />
     </form>
+    <span>Picture<span id="PictureStatus">Show</span></span>
     </div>
 </body>
 </html>

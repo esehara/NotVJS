@@ -22,8 +22,10 @@ class Binding:
             "UpPicture": self.up_pic,
             "DownPicture": self.down_pic,
             "LeftPicture": self.left_pic,
-            "RightPicture": self.right_pic}
+            "RightPicture": self.right_pic,
+            "ShowPictureToggle": self.show_picture_toggle}
 
+        self.show_status = True
         self.picture_y = 0
         self.picture_x = 0
         self.current_background = None
@@ -130,6 +132,12 @@ class Binding:
             'set_image', filename)
         self.filemanager.filelist = os.listdir(
             os.path.join(self.filemanager.static_path, 'pic'))
+
+    def show_picture_toggle(self, socket):
+
+        self.show_status = not self.show_status
+        socket.broadcast(
+            'show_image_toggle', self.show_status)
 
     def test_print(self, socket):
         self.num += 1
