@@ -36,14 +36,30 @@
             vjsystem.emit('KeyEvent', 'RotatePicture');
         });
 
-        shortcut.add('L', function() {
+        shortcut.add('E', function() {
             vjsystem.emit('KeyEvent', 'ColorLinePicture');
         });
 
         shortcut.add('S', function() {
             vjsystem.emit('KeyEvent', 'ShadowLinePicture');
         });
-        
+
+        shortcut.add('up', function() {
+            vjsystem.emit('KeyEvent', 'UpPicture');
+        });
+
+        shortcut.add('down', function() {
+            vjsystem.emit('KeyEvent', 'DownPicture');
+        });
+
+        shortcut.add('left', function() {
+            vjsystem.emit('KeyEvent', 'LeftPicture');
+        });
+
+        shortcut.add('right', function() {
+            vjsystem.emit('KeyEvent', 'RightPicture');
+        });
+
         // Establish event handlers
         vjsystem.on('disconnect', function() {
             vjsystem.socket.reconnect();
@@ -77,6 +93,11 @@
           }
         });
 
+        vjsystem.on('set_position', function(json) {
+            $('#vj_image_wrapper').css('top', json.y);
+            $('#vj_image_wrapper').css('left', json.x);
+        });
+
       $('#submitButton').click(function() {
         $('input[type=file]').upload('/upload',
             function(res) {
@@ -94,7 +115,7 @@
 <body>
     <h1>NotVJS</h1>
      
-    <div id="vj_image_wrapper">
+    <div id="vj_image_wrapper" style="position:absolute">
         <img src="" id="vj_image"/>
     </div>
     <div id="vj_form">

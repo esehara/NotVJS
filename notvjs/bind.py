@@ -1,46 +1,8 @@
 # -*- coding: utf-8 -*-
 
 import os
-from utils import ImageDestory
-
-
-class FileManager:
-
-    ROOT = os.path.join(os.path.normpath(
-        os.path.dirname(__file__)), '..')
-
-    static_path = os.path.join(
-        ROOT, 'static')
- 
-    filelist = os.listdir(
-        os.path.join(static_path, 'pic'))
-
-    def __init__(self):
-        self.tempfile = None
-        self.pointer = 0
-
-    def current(self):
-        if self.tempfile is None:
-            return "pic/" + self.filelist[self.pointer]
-        else:
-            return self.tempfile
-
-    def next(self):
-        self.tempfile = None
-        self.pointer += 1
-        if self.pointer >= len(self.filelist):
-            self.pointer = 0
-        return self.current()
-
-    def past(self):
-        self.tempfile = None
-        self.pointer -= 1
-        if self.pointer < 0:
-            self.pointer = len(self.filelist) - 1
-        return self.current()
-
-    def set_path(self, path):
-        self.tempfile = path
+from utils.file import FileManager
+from utils.image import ImageDestory
 
 
 class Binding:
@@ -56,7 +18,14 @@ class Binding:
             "ClearBackground": self.clear_background,
             "RotatePicture": self.rotate_pic,
             "ColorLinePicture": self.colorline_pic,
-            "ShadowLinePicture": self.shadowline_pic}
+            "ShadowLinePicture": self.shadowline_pic,
+            "UpPicture": self.up_pic,
+            "DownPicture": self.down_pic,
+            "LeftPicture": self.left_pic,
+            "RightPicture": self.right_pic}
+
+        self.picture_y = 0
+        self.picture_x = 0
 
         self.bindings = {
             "LoadPicture": self.set_picture}
@@ -112,6 +81,28 @@ class Binding:
         socket.broadcast(
             'set_background_image', '')
 
+    def up_pic(self, socket):
+        self.picture_y -= 50
+        self.set_picture_position(socket)
+
+    def down_pic(self, socket):
+        self.picture_y += 50
+        self.set_picture_position(socket)
+
+    def left_pic(self, socket):
+        self.picture_x -= 50
+        self.set_picture_position(socket)
+
+    def right_pic(self, socket):
+        self.picture_x += 50
+        self.set_picture_position(socket)
+
+    def set_picture_position(self, socket):
+        socket.broadcast(
+            'set_position', {
+                'x': self.picture_x,
+                'y': self.picture_y})
+
     def set_background(self, socket):
 
         filename = self.filemanager.current()
@@ -123,6 +114,8 @@ class Binding:
         filename = self.filemanager.current()
         socket.broadcast(
             'set_image', filename)
+        self.filemanager.filelist = os.listdir(
+            os.path.join(self.filemanager.static_path, 'pic'))
 
     def test_print(self, socket):
         self.num += 1

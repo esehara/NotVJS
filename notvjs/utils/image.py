@@ -4,11 +4,12 @@ from PIL import Image, ImageDraw
 from random import randint
 from time import sleep
 
+
 class ImageDestory:
-    
+
     def __init__(self, imagepath):
         self.img = Image.open(imagepath)
-        self.img.x, self.img.y = self.img.size 
+        self.img.x, self.img.y = self.img.size
 
     def _select_rotate(self):
         target = randint(0, 3)
@@ -143,6 +144,7 @@ class ImageDestory:
 
     def save(self, imagepath):
         self.img.save(imagepath, "JPEG")
+
 
 def module_test_main():
     img = ImageDestory("base.jpg")
