@@ -26,9 +26,10 @@ class Binding:
 
         self.picture_y = 0
         self.picture_x = 0
+        self.current_background = None
 
         self.bindings = {
-            "LoadPicture": self.set_picture}
+            "LoadConfigure": self.get_configure}
 
     def run_key_event(self, socket, event, *args, **kwargs):
         self.bindings_key[event](socket, *args, **kwargs)
@@ -78,6 +79,7 @@ class Binding:
         self.set_picture(socket)
 
     def clear_background(self, socket):
+        self.current_background = None
         socket.broadcast(
             'set_background_image', '')
 
@@ -106,8 +108,20 @@ class Binding:
     def set_background(self, socket):
 
         filename = self.filemanager.current()
+        self.current_background = filename
         socket.broadcast(
             'set_background_image', filename)
+
+    def get_configure(self, socket):
+
+        get_configure = {
+            'image': self.filemanager.current(),
+            'background': self.current_background,
+            'position': {
+                'x': self.picture_x, 'y': self.picture_y}}
+
+        socket.broadcast(
+            'set_configure', get_configure)
 
     def set_picture(self, socket):
 

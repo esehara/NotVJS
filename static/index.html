@@ -69,19 +69,26 @@
             
           function run_start()
           {
-
-              vjsystem.emit('Event', 'LoadPicture');
-              /*
-              ping.emit('ping', encodeDate(new Date()), function(clientDate, serverDate) {
-              
-              });
-              */
+              vjsystem.emit('Event', 'LoadConfigure');
           }
           run_start();
       });
       
       vjsystem.on('set_image', function(url) {
           $("#vj_image").attr({'src': url});
+      });
+
+      vjsystem.on('set_configure', function(json) {
+          $("#vj_image").attr({'src': json.image});
+          
+          $('#vj_image_wrapper').css('top', json.position.y);
+          $('#vj_image_wrapper').css('left', json.position.x);
+          
+          if (typeof json.background === "null") {
+            $("body").css('background-image', '');
+          } else {
+            $("body").css('background-image', 'url(' + json.background + ')');
+          }
       });
 
       vjsystem.on('set_background_image', function(url) {
