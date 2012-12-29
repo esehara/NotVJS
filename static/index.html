@@ -62,8 +62,12 @@
             vjsystem.emit('KeyEvent', 'RightPicture');
         });
 
-        shortcut.add('S', function() {
+        shortcut.add('2', function() {
             vjsystem.emit('KeyEvent', 'ShowPictureToggle');
+        });
+
+        shortcut.add('1', function() {
+            vjsystem.emit('KeyEvent', 'BackgroundSyncToggle');
         });
 
         // Establish event handlers
@@ -81,17 +85,36 @@
       });
       
       vjsystem.on('set_image', function(url) {
-          $("#vj_image").attr({'src': url});
+          vjsystem_changer.set_image(url);
       });
 
       vjsystem.on('set_configure', function(json) {
-          $("#vj_image").attr({'src': json.image});
+          vjsystem_changer.show_image_toggle(json.show_status);
+          vjsystem_changer.set_background_sync(json.background_sync);
           vjsystem_changer.set_position(json.position);
           vjsystem_changer.set_background_image(json.background);
-          vjsystem_changer.show_image_toggle(json.show_status);
+          vjsystem_changer.set_image(json.image);
       });
 
+      var vjconfig = {
+          background_sync: false
+      }
+
+
       var vjsystem_changer = {
+
+          set_image: function(url) {
+            $("#vj_image").attr({'src': url});
+            if (vjconfig.background_sync) {
+                vjsystem_changer.set_background_image(url);
+            }
+          },
+
+          set_background_sync: function(bool) {
+            vjconfig.background_sync = bool;
+            $('#BackgroundSyncStatus').text(bool.toString());
+        },
+
             set_background_image: function(url) {
                 if (url === "") {
                     $("body").css('background-image', '');
@@ -111,8 +134,13 @@
                     } else {
                     $('#vj_image').css('display', 'none');
                 }
+                $('#PictureStatusShow').text(bool.toString());
             }
       };
+
+        vjsystem.on('set_background_sync', function(bool) {
+          vjsystem_changer.set_background_sync(bool);
+        });
 
         vjsystem.on('set_background_image', function(url) {
             vjsystem_changer.set_background_image(url);
@@ -146,12 +174,18 @@
     <div id="vj_image_wrapper" style="position:absolute">
         <img src="" id="vj_image"/>
     </div>
+
+<div id="footer">
     <div id="vj_form">
     <form method="POST" action="/upload" id="fileupload">
         <input type="file" name="filearg"/>
         <input type="button" id="submitButton" />
     </form>
-    <span>Picture<span id="PictureStatus">Show</span></span>
     </div>
+    <div id="vj_status">
+        <span>Picture::Show: <span id="PictureStatusShow">True</span></span>
+        <span>Background::Sync: <span id="BackgroundSyncStatus">False</span><span>
+    </div>
+</div>
 </body>
 </html>

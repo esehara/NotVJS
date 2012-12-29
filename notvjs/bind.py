@@ -23,15 +23,23 @@ class Binding:
             "DownPicture": self.down_pic,
             "LeftPicture": self.left_pic,
             "RightPicture": self.right_pic,
+            "BackgroundSyncToggle": self.background_sync_toggle,
             "ShowPictureToggle": self.show_picture_toggle}
 
         self.show_status = True
+        self.background_sync_status = False
         self.picture_y = 0
         self.picture_x = 0
         self.current_background = None
 
         self.bindings = {
             "LoadConfigure": self.get_configure}
+
+    def background_sync_toggle(self, socket):
+        self.background_sync_status = not self.background_sync_status
+        socket.broadcast(
+            'set_background_sync',
+            self.background_sync_status)
 
     def run_key_event(self, socket, event, *args, **kwargs):
         self.bindings_key[event](socket, *args, **kwargs)
@@ -121,7 +129,8 @@ class Binding:
             'background': self.current_background,
             'position': {
                 'x': self.picture_x, 'y': self.picture_y},
-            'show_status': self.show_status}
+            'show_status': self.show_status,
+            'background_sync': self.background_sync_status}
 
         socket.broadcast(
             'set_configure', get_configure)

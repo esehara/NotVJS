@@ -27,10 +27,20 @@ h1 {
     margin-right: auto;
 }
 
+#footer{
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+}
+
 #vj_form {
     background-color: black;
     width: 100%;
-    position: fixed;
-    bottom: 0px;
+    color: white;
 }
 
+#vj_status {
+    background-color: black;
+    width:100%;
+    color: white;
+}
